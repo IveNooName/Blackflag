@@ -55,6 +55,7 @@ public class AlbumService {
 
 		try {
 			log.info("Starting Python Container...");
+			log.info("Start Downloading...");
 //			pb.inheritIO(); //Shows Python/Docker-Container console on the Spring console
 
 			Process process = pb.start();
