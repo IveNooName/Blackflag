@@ -71,23 +71,4 @@ public class AlbumController {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-
-	/*
-	@GetMapping("music/download")
-	public ResponseEntity<Resource> getAlbumZipArchive(@RequestParam String link) {
-
-		log.info("became a request. Now waiting...");
-		int seconds = 6;
-		int timeInMs = seconds * 1000;
-
-		try {
-			Thread.sleep(timeInMs);
-		} catch(InterruptedException ignored) {
-		}
-
-		log.info("finished waiting");
-		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-	}
-
-	 */
 }
