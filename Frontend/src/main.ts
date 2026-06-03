@@ -1,13 +1,5 @@
 async function getDownload(link: string): Promise<boolean> {
 
-    // try {
-    //     window.location.href = "http://localhost:8080/api/v1/music/download?link=" + link;
-    //     return true;
-    // } catch (e) {
-    //     console.error(e);
-    //     return false;
-    // }
-
     try {
         const response = await fetch(
             "http://localhost:8080/api/v1/music/download?link=" + encodeURIComponent(link)
@@ -38,22 +30,22 @@ async function getDownload(link: string): Promise<boolean> {
 
 function getDeezerLink(): string {
     const urlField = document.getElementById("deezer-album-url-input") as HTMLInputElement;
-
-    if (urlField == null) {
-        throw new Error("URL field is not available");
-    }
-
     return urlField.value;
 
 }
 
 function isValidUrlFormat(link: string): boolean {
+
+    if (link == null) {
+        return false;
+    }
+
     const regex = /^https:\/\/www\.deezer\.com\/[a-z]{2}\/album\/[a-zA-Z0-9]+\/?$/;
     return regex.test(link);
 
 }
 
-function showInvalidLinkField():void {
+function showInvalidLinkField(): void {
     const textField = document.getElementById("deezer-album-url-input") as HTMLInputElement;
     const feedbackText = document.getElementById("deezer-album-url-feedback") as HTMLDivElement;
 
@@ -62,7 +54,7 @@ function showInvalidLinkField():void {
 
 }
 
-function hideInvalidLinkField():void {
+function hideInvalidLinkField(): void {
 
     const textField = document.getElementById("deezer-album-url-input") as HTMLInputElement;
     const feedbackText = document.getElementById("deezer-album-url-feedback") as HTMLDivElement;
@@ -72,7 +64,7 @@ function hideInvalidLinkField():void {
 
 }
 
-function showLoadingIndicator():void {
+function showLoadingIndicator(): void {
     const spinner = document.getElementById("deezer-album-url-button-spinner") as HTMLButtonElement;
     const text = document.getElementById("deezer-album-url-button-text") as HTMLInputElement;
 
@@ -81,7 +73,7 @@ function showLoadingIndicator():void {
 
 }
 
-function hideLoadingIndicator():void {
+function hideLoadingIndicator(): void {
     const spinner = document.getElementById("deezer-album-url-button-spinner") as HTMLButtonElement;
     const text = document.getElementById("deezer-album-url-button-text") as HTMLInputElement;
 
@@ -99,13 +91,14 @@ async function main(): Promise<void> {
         submitButton.disabled = true;
 
         const link: string = getDeezerLink();
-        const status = isValidUrlFormat(link);
+        const status: boolean = isValidUrlFormat(link);
 
         if (!status) {
             showInvalidLinkField();
             urlField.readOnly = false;
             submitButton.disabled = false;
-            throw new Error("URL is invalid");
+            console.error("URL is invalid");
+            return;
         }
 
         showLoadingIndicator();
