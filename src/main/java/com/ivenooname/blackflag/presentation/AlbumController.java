@@ -9,16 +9,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/music")
+@RequestMapping("/api/v1/")
 @Slf4j
 public class AlbumController {
 
@@ -28,8 +25,8 @@ public class AlbumController {
 		this.albumService = albumService;
 	}
 
-	@GetMapping("/download")
-	public ResponseEntity<Resource> getAlbumZipArchive(@RequestBody String link) {
+	@GetMapping("music/download")
+	public ResponseEntity<Resource> getAlbumZipArchive(@RequestParam String link) {
 
 		if(link == null) {
 			log.info("link is null");
@@ -57,8 +54,10 @@ public class AlbumController {
 			albumService.makeZipFile(album, outputPath, zipFilePath);
 
 
-			File zipFile = new File(zipFilePath + album.getId() + ".zip");
 			log.info("Preparing ResponseEntity...");
+			File zipFile = new File(zipFilePath + album.getId() + ".zip");
+
+			log.info("Sending Response...");
 			return ResponseEntity.ok()
 					.contentType(MediaType.APPLICATION_OCTET_STREAM)
 					.header(
