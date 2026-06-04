@@ -1,3 +1,11 @@
+import {
+    closeErrorAlert,
+    hideInvalidLinkField,
+    hideLoadingIndicator,
+    showInvalidLinkField,
+    showLoadingIndicator
+} from "./uiFunctions";
+
 async function getDownload(link: string): Promise<boolean> {
 
     try {
@@ -6,18 +14,16 @@ async function getDownload(link: string): Promise<boolean> {
         );
 
         if (!response.ok) {
-            throw new Error(`Server error: ${response.status}`);
+            console.error("Server error: " + response.status)
+            return false;
         }
 
         const blob = await response.blob();
 
-        const disposition = response.headers.get("Content-Disposition");
-        const filename = disposition?.match(/filename="?([^"]+)"?/)?.[1] ?? "download";
-
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = filename;
+        a.download = "archive.zip";
         a.click();
         URL.revokeObjectURL(url);
 
@@ -43,42 +49,6 @@ function isValidUrlFormat(link: string): boolean {
     const regex = /^https:\/\/www\.deezer\.com\/[a-z]{2}\/album\/[a-zA-Z0-9]+\/?$/;
     return regex.test(link);
 
-}
-
-function showInvalidLinkField(): void {
-    const textField = document.getElementById("deezer-album-url-input") as HTMLInputElement;
-    const feedbackText = document.getElementById("deezer-album-url-feedback") as HTMLDivElement;
-
-    feedbackText.style.display = "block";
-    textField.classList.add("is-invalid");
-
-}
-
-function hideInvalidLinkField(): void {
-
-    const textField = document.getElementById("deezer-album-url-input") as HTMLInputElement;
-    const feedbackText = document.getElementById("deezer-album-url-feedback") as HTMLDivElement;
-
-    feedbackText.style.display = "none";
-    textField.classList.remove("is-invalid");
-
-}
-
-function showLoadingIndicator(): void {
-    const spinner = document.getElementById("deezer-album-url-button-spinner") as HTMLButtonElement;
-    const text = document.getElementById("deezer-album-url-button-text") as HTMLInputElement;
-
-    spinner.hidden = false;
-    text.innerText = "Loading...";
-
-}
-
-function hideLoadingIndicator(): void {
-    const spinner = document.getElementById("deezer-album-url-button-spinner") as HTMLButtonElement;
-    const text = document.getElementById("deezer-album-url-button-text") as HTMLInputElement;
-
-    spinner.hidden = true;
-    text.innerText = "Submit";
 }
 
 async function main(): Promise<void> {
@@ -116,12 +86,6 @@ async function main(): Promise<void> {
         alert.style.display = "block";
         console.error(e);
     }
-}
-
-function closeErrorAlert(): void {
-    const alert = document.getElementById("error-alert") as HTMLDivElement;
-    alert.style.display = "none";
-
 }
 
 (window as any).main = main;
