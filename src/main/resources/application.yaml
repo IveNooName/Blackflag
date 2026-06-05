@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: blackflag
+
+app:
+  output-path: ${user.home}/blackflag/temp/downloads/
+  zip-file-path: ${user.home}/blackflag/temp/archives/
