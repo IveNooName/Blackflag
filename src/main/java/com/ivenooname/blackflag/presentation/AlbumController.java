@@ -39,17 +39,26 @@ public class AlbumController {
 		}
 
 		try {
-			Optional<String> checkedLink = albumService.isAlbumLinkValid(link);
+			String downloadLink;
+			Optional<String> checkedAlbumLink = albumService.isAlbumLinkValid(link);
 
-			if(checkedLink.isEmpty()) {
-				log.info("invalid album link");
-				return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+			if(checkedAlbumLink.isEmpty()) {
+				Optional<String> checkedTrackLink = albumService.isTrackLinkValid(link);
+
+				if(checkedTrackLink.isEmpty()) {
+					log.info("invalid link");
+					return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+				} else {
+					downloadLink = checkedTrackLink.get();
+				}
+			} else {
+				downloadLink = checkedAlbumLink.get();
 			}
 
-			AlbumDTO album = new AlbumDTO(checkedLink.get());
+			AlbumDTO album = new AlbumDTO(downloadLink);
 
-			String outputPath = "/Users/teset/blackflag/temp/downloads/" + album.getId();
-			String zipFilePath = "/Users/teset/blackflag/temp/archives/";
+			String outputPath = "/Users/sonoma/Development/blackflag/temp/downloads/" + album.getId();
+			String zipFilePath = "/Users/sonoma/Development/blackflag/temp/archives/";
 
 			albumService.startPythonDockerContainer(album, outputPath);
 			albumService.makeZipFile(album, outputPath, zipFilePath);

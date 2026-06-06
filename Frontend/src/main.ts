@@ -46,12 +46,16 @@ function isValidUrlFormat(link: string): boolean {
         return false;
     }
 
-    const regex = /^https:\/\/www\.deezer\.com\/[a-z]{2}\/album\/[a-zA-Z0-9]+\/?$/;
-    if (regex.test(link)) {
+    const albumRegex = /^https:\/\/www\.deezer\.com\/[a-z]{2}\/album\/[a-zA-Z0-9]+\/?$/;
+    if (albumRegex.test(link)) {
         return true;
     }
     const trackRegex = /^https:\/\/www\.deezer\.com\/track\/[a-zA-Z0-9]+\/?$/;
-    return trackRegex.test(link);
+    if (trackRegex.test(link)) {
+        return true;
+    }
+    const sharedTrackRegex = /^https:\/\/link\.deezer\.com\/s\/[a-zA-Z0-9]+\/?$/;
+    return sharedTrackRegex.test(link);
 
 }
 

@@ -31,9 +31,6 @@ public class AlbumDTO {
 		return id;
 	}
 
-//	public void setId(UUID id) {
-//		this.id = id;
-//	}
 
 	public String getAlbumLink() {
 		return albumLink;
