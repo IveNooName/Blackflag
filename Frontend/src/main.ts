@@ -47,7 +47,11 @@ function isValidUrlFormat(link: string): boolean {
     }
 
     const regex = /^https:\/\/www\.deezer\.com\/[a-z]{2}\/album\/[a-zA-Z0-9]+\/?$/;
-    return regex.test(link);
+    if (regex.test(link)) {
+        return true;
+    }
+    const trackRegex = /^https:\/\/www\.deezer\.com\/track\/[a-zA-Z0-9]+\/?$/;
+    return trackRegex.test(link);
 
 }
 

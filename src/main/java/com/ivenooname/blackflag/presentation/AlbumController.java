@@ -48,8 +48,8 @@ public class AlbumController {
 
 			AlbumDTO album = new AlbumDTO(checkedLink.get());
 
-			String outputPath = "/Users/sonoma/blackflag/temp/downloads/" + album.getId();
-			String zipFilePath = "/Users/sonoma/blackflag/temp/archives/";
+			String outputPath = "/Users/teset/blackflag/temp/downloads/" + album.getId();
+			String zipFilePath = "/Users/teset/blackflag/temp/archives/";
 
 			albumService.startPythonDockerContainer(album, outputPath);
 			albumService.makeZipFile(album, outputPath, zipFilePath);

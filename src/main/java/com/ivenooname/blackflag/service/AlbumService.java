@@ -22,8 +22,26 @@ public class AlbumService {
 	}
 
 	public Optional<String> isAlbumLinkValid(String link) {
-		if(! link.matches("\"?https://www\\.deezer\\.com/[a-z]{2}/album/[a-zA-Z0-9/]+\"?")) {
-			log.info("Doesnt match the link format");
+		if(link.matches("\"?https://www\\.deezer\\.com/[a-z]{2}/album/[a-zA-Z0-9/]+\"?")) {
+			//replace the language (as example: '/de/' from the link and additional '"'
+			String newLink = link.replaceAll("\\/[a-z]{2}\\/", "/");
+			newLink = newLink.replace("\"", "");
+
+			return Optional.of(newLink);
+
+		} else if(link.matches("\"?https://www\\.deezer\\.com/track/[a-zA-Z0-9/]+\"?")) {
+			String newLink = link.replace("\"", "");
+
+			return Optional.of(newLink);
+		}
+
+		log.info("Doesnt match the link format for albums");
+		return Optional.empty();
+	}
+
+	public Optional<String> isTrackLinkValid(String link) {
+		if(! link.matches("\"?https://www\\.deezer\\.com/[a-z]{2}/track/[a-zA-Z0-9/]+\"?")) {
+			log.info("Doesnt match the link format for tracks");
 			return Optional.empty();
 		}
 
