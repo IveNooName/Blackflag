@@ -18,20 +18,45 @@ import java.util.Optional;
 @Slf4j
 public class AlbumService {
 
-	public AlbumService() {
+	TrackUrlConverter trackUrlConverter;
+
+	public AlbumService(TrackUrlConverter trackUrlConverter) {
+		this.trackUrlConverter = trackUrlConverter;
 	}
 
 	public Optional<String> isAlbumLinkValid(String link) {
-		if(! link.matches("\"?https://www\\.deezer\\.com/[a-z]{2}/album/[a-zA-Z0-9/]+\"?")) {
-			log.info("Doesnt match the link format");
+		if(link.matches("\"?https://www\\.deezer\\.com/[a-z]{2}/album/[a-zA-Z0-9/]+\"?")) {
+			//replace the language (as example: '/de/' from the link and additional '"'
+			String newLink = link.replaceAll("\\/[a-z]{2}\\/", "/");
+			newLink = newLink.replace("\"", "");
+
+			return Optional.of(newLink);
+
+		}
+
+		log.info("Doesnt match the link format for albums or tracks");
+		return Optional.empty();
+	}
+
+	public Optional<String> isTrackLinkValid(String inputLink) {
+		Optional<String> optionalTrackLink = trackUrlConverter.deezerUrlConverter(inputLink);
+
+		if(optionalTrackLink.isEmpty()) {
+			log.info("cannot convert track link");
 			return Optional.empty();
 		}
 
-		//replace the language (as example: '/de/' from the link and additional '"'
-		String newLink = link.replaceAll("\\/[a-z]{2}\\/", "/");
-		newLink = newLink.replace("\"", "");
+		String link = optionalTrackLink.get();
 
-		return Optional.of(newLink);
+		if(! link.matches("\"?https://www\\.deezer\\.com/track/[a-zA-Z0-9/]+\"?")) {
+			log.info("Doesnt match the link format for tracks");
+			return Optional.empty();
+		}
+
+		//replace the language (as example: '"' from the link
+		link = link.replace("\"", "");
+
+		return Optional.of(link);
 	}
 
 	public void startPythonDockerContainer(AlbumDTO album, String outputPath) {
