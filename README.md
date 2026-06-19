@@ -28,5 +28,8 @@ docker run -p 8080:8080 my-spring-app:latest
 ### WebUI:
 Auffindbar unter: http://localhost:8080
 
+### Die Tracks können hier gesucht werden:
+https://www.deezer.com/de/channels/explore/
+
 ---
 Made by IveNooName in 2026
