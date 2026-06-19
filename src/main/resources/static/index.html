@@ -15,7 +15,10 @@
 <header>
     <div class="bs-component">
         <div class="navbar-dark bg-primary py-2">
-            <div class="h1 text-white text-center">Blackflag</div>
+            <div class="container d-flex align-items-center justify-content-center">
+                <img src="/assets/logo-dark-BznT02im.svg" alt="Blackflag Logo" style="height: 2em" class="img-fluid h1">
+                <div class="h1 text-white text-center ms-4">Blackflag</div>
+            </div>
         </div>
     </div>
     <br>
@@ -30,10 +33,12 @@
 </div>
 
 <div class="input-group input-group-lg py-4 has-validation">
+    <p class=""></p>
     <div class="form-floating">
-        <input class="form-control" type="url" id="deezer-album-url-input" placeholder="Enter Deezer album link"
+        <input class="form-control" type="url" id="deezer-album-url-input"
+               placeholder="Enter Deezer album or track link"
                onclick="hideInvalidLinkField()">
-        <label for="deezer-album-url-input">Deezer Album Link</label>
+        <label for="deezer-album-url-input">Deezer Link</label>
     </div>
     <button class="btn btn-primary" id="deezer-album-url-button" onclick="main()">
         <span class="spinner-border spinner-border-sm" id="deezer-album-url-button-spinner" aria-hidden="true"
