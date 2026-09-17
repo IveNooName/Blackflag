@@ -70,33 +70,33 @@ public class AlbumService {
 		}
 
 		ProcessBuilder pb = new ProcessBuilder(
-				"docker", "run",
-				"--rm",
-				"-v", outputPath + ":/data",
-				"streamrip_v1_docker",
-				"--no-db", "url", album.getAlbumLink()
+				"rip",
+				"--no-db",
+				"url", album.getAlbumLink()
 		);
+
+		pb.directory(new File(outputPath));
 		pb.redirectErrorStream(true);
 
 		try {
-			log.info("Starting Python Container...");
+			log.info("Starting Python...");
 			log.info("Start Downloading...");
-			pb.inheritIO(); //Shows Python/Docker-Container console on the Spring console
+			pb.inheritIO(); //Shows Python logs on the Spring console
 
 			Process process = pb.start();
 			int exit = process.waitFor();
 
 			if(exit != 0) {
-				log.error("Python Container failed with exit code: {}", exit);
-				throw new ContainerErrorCodeException("Python Container failed with exit code: " + exit);
+				log.error("Python script failed with exit code: {}", exit);
+				throw new ContainerErrorCodeException("Python script failed with exit code: " + exit);
 			}
 
 		} catch(IOException | InterruptedException e) {
-			log.error("Error by the Python container: {}", e.toString());
-			throw new ContainerException("An Error on the Python Container occurred: " + e);
+			log.error("Error by the Python script: {}", e.toString());
+			throw new ContainerException("An Error on the Python script occurred: " + e);
 		}
 
-		log.info("Finished Download and stopped Python container");
+		log.info("Finished Download and stopped Python script");
 	}
 
 	public void makeZipFile(AlbumDTO album, String outputPath, String zipFilePath) {
