@@ -3,6 +3,7 @@ package com.ivenooname.blackflag.presentation;
 import com.ivenooname.blackflag.service.AlbumDTO;
 import com.ivenooname.blackflag.service.AlbumService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +20,11 @@ import java.util.Optional;
 @Slf4j
 public class AlbumController {
 
+	@Value("${app.output-path}")
+	private String baseOutputPath;
+
+	@Value("${app.zip-file-path}")
+	private String baseZipFilePath;
 	private final AlbumService albumService;
 
 	public AlbumController(AlbumService albumService) {
@@ -57,15 +63,14 @@ public class AlbumController {
 
 			AlbumDTO album = new AlbumDTO(downloadLink);
 
-			String outputPath = "/Users/sonoma/Development/blackflag/temp/downloads/" + album.getId();
-			String zipFilePath = "/Users/sonoma/Development/blackflag/temp/archives/";
+			String outputPath = baseOutputPath + album.getId();
 
 			albumService.startPythonDockerContainer(album, outputPath);
-			albumService.makeZipFile(album, outputPath, zipFilePath);
+			albumService.makeZipFile(album, outputPath, baseZipFilePath);
 
 
 			log.info("Preparing ResponseEntity...");
-			File zipFile = new File(zipFilePath + album.getId() + ".zip");
+			File zipFile = new File(baseZipFilePath + album.getId() + ".zip");
 
 			log.info("Sending Response...");
 			return ResponseEntity.ok()

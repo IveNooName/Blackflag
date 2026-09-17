@@ -1,6 +1,9 @@
 spring:
   application:
     name: blackflag
+  docker:
+    compose:
+      enabled: false
 
 app:
   output-path: ${user.home}/blackflag/temp/downloads/
